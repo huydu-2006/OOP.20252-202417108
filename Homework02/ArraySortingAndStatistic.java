@@ -9,18 +9,18 @@ public class ArraySortingAndStatistic {
         String inputStr, sumStr = "The sum of array elements is: ", avgStr = "The average of array elements is: ";
         Scanner sc = new Scanner(System.in);
         inputStr = sc.next();
-        List<Integer> list = new ArrayList<>();
+        List<Double> list = new ArrayList<>();
         if (inputStr.equals("Y")) {
             int n;
             System.out.println("Enter the number of elements in the array: ");
             n = sc.nextInt();
             System.out.println("Enter the elements in the array: ");
             for (int i = 0; i < n; i++) {
-                list.add(sc.nextInt());
+                list.add(sc.nextDouble());
             }
         }
         else if (inputStr.equals("N")) {
-            list.add(1); list.add(2); list.add(3); list.add(4); list.add(5);
+            list.add(1.0); list.add(2.0); list.add(3.0); list.add(4.0); list.add(5.0);
         }
         else {
             JOptionPane.showMessageDialog(null, "Invalid input enter", "Invalid input enter", JOptionPane.ERROR_MESSAGE);
@@ -28,13 +28,13 @@ public class ArraySortingAndStatistic {
         }
         Collections.sort(list);
         System.out.print("The sorted array is: " + Arrays.toString(list.toArray()));
-        int sum =  0;
-        for (int i : list) {
+        double sum =  0;
+        for (double i : list) {
             sum += i;
         }
         System.out.println();
         System.out.println(sumStr + sum);
-        System.out.println(avgStr + String.format("%.2f", (double)sum / list.size()));
+        System.out.println(avgStr + String.format("%.2f", sum / list.size()));
         System.exit(0);
     }
 }
