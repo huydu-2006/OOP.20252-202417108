@@ -28,7 +28,7 @@ public class ArraySortingAndStatistic {
         }
         Collections.sort(list);
         System.out.print("The sorted array is: " + Arrays.toString(list.toArray()));
-        int sum = 0;
+        int sum =  0;
         for (int i : list) {
             sum += i;
         }
