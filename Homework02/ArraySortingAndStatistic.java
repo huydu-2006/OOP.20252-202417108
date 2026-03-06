@@ -27,11 +27,10 @@ public class ArraySortingAndStatistic {
             System.exit(0);
         }
         Collections.sort(list);
-        System.out.print("The sorted array is: ");
+        System.out.print("The sorted array is: " + Arrays.toString(list.toArray()));
         int sum = 0;
         for (int i : list) {
             sum += i;
-            System.out.print(i + " ");
         }
         System.out.println();
         System.out.println(sumStr + sum);
