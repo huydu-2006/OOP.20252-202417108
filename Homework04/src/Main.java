@@ -1,5 +1,3 @@
-import java.lang.Math;
-
 public class Main {
     public static void main(String[] args) {
         BankAccount user1 = new BankAccount();
@@ -33,6 +31,10 @@ public class Main {
         user1.payBill(100_000, "electricity", user1ID, user1CustomerName);
         System.out.println(user1CustomerName + " balance is : " + user1.checkBalance(user1ID, user1CustomerName));
 //        user1.payBill(248_000, "electricity", user2ID, user2CustomerName);
-        user1.payBill(10_000, "shopping", user1ID, user2CustomerName);
+//        user1.payBill(10_000, "shopping", user1ID, user2CustomerName);
+
+        // print final result
+        System.out.println(user1CustomerName + " balance is : " + user1.checkBalance(user1ID, user1CustomerName));
+        System.out.println(user2CustomerName + " balance is : " + user2.checkBalance(user2ID, user2CustomerName));
     }
 }
