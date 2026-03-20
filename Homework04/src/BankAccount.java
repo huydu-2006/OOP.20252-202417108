@@ -28,6 +28,7 @@ public class BankAccount {
         BankAccount.customerIdList.add(getHashCode(this.accountNumber, this.customerName));
         System.out.println("Done!");
     }
+
     public boolean deposite(double amount, int customerID, String customerName) {
         if (!isOwner(customerID, customerName)) {
             return false;
@@ -36,7 +37,10 @@ public class BankAccount {
             System.out.println("Invalid amount");
             return false;
         }
-        
+        else if (!this.customerName.equals(customerName) || this.accountNumber != customerID) {
+            System.out.println("Invalid user");
+            return false;
+        }
         this.balance += amount;
         System.out.println(customerName + " deposited " + amount);
         return true;
@@ -52,6 +56,10 @@ public class BankAccount {
         }
         else if (this.balance - amount < BankAccount.INITIAL_BALANCE) {
             System.out.println("Insufficient balance");
+            return false;
+        }
+        else if (!this.customerName.equals(customerName) || this.accountNumber != customerID) {
+            System.out.println("Invalid user");
             return false;
         }
 
@@ -93,7 +101,6 @@ public class BankAccount {
             return false;
         }
         else if (!isOwner(customerID, customerName)) {
-            System.out.println("Invalid user");
             return false;
         }
         else if (this.balance - amount < BankAccount.INITIAL_BALANCE) {
@@ -108,7 +115,6 @@ public class BankAccount {
 
     public double checkBalance(int customerID, String customerName) {
         if (!isOwner(customerID, customerName)) {
-            System.out.println("Invalid user");
             return -1D;
         }
 
@@ -124,20 +130,19 @@ public class BankAccount {
             System.out.println("Invalid user");
             return false;
         }
-
         return true;
     }
 
     public static int getHashCode(int customerID, String customerName) {
-        final int p = 53, m = (int)Math.pow(10, 9) + 9;
+        final int p = 53, m = 1103;
         int hashValue = 0, p_pow = 1;
 
         for (char c : customerName.toCharArray()) {
-            hashValue = (hashValue + c * p_pow) % m;
+            hashValue = (hashValue + (c * (p_pow) % m) % m) % m;
             p_pow = (p_pow * p) % m;
         }
 
-        return (((hashValue % m) * p) % m * (customerID % m)) % m;
+        return (((hashValue % m) * p) % m * ((customerID + 1) % m)) % m;
     }
 
     public int getAccountNumber() {
