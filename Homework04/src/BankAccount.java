@@ -45,7 +45,8 @@ public class BankAccount {
 
     public double checkBalance(long customerID, String customerName) {
         if (!isOwner(customerID, customerName)) {
-            return false;
+            System.out.println("Invalid user");
+            return -1D;
         }
 
         return this.balance;
@@ -53,9 +54,11 @@ public class BankAccount {
 
     public static boolean isOwner(long customerID, String customerName) {
         if (customerID >= BankAccount.numsCustomerCount) {
+            System.out.println("Invalid user");
             return false;
         }
         else if (BankAccount.get(customerID) != getHashCode(customerID, customerName)) {
+            System.out.println("Invalid user");
             return false;
         }
 
