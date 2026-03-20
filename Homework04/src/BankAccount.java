@@ -38,7 +38,7 @@ public class BankAccount {
         }
         
         this.balance += amount;
-        System.out.println("Done");
+        System.out.println(customerName + " deposited " + amount);
         return true;
     }
 
@@ -56,7 +56,7 @@ public class BankAccount {
         }
 
         this.balance -= amount;
-        System.out.println("Done");
+        System.out.println(customerName + " withdrawn " + amount);
         return true;
     }
 
@@ -79,7 +79,7 @@ public class BankAccount {
         
         this.balance -= amount * (1 + BankAccount.TRANSFER_FEE);
         receiveAccount.balance += amount;
-        System.out.println("Done");
+        System.out.println(customerName  + " transferred " + amount + " to " + receiveAccount.customerName);
         return true;
     }
 
@@ -102,7 +102,7 @@ public class BankAccount {
         }
 
         this.balance -= amount;
-        System.out.println("Done");
+        System.out.println(customerName + " payed " + amount + " to " + billName);
         return true;
     }
 
