@@ -139,4 +139,12 @@ public class BankAccount {
 
         return (((hashValue % m) * p) % m * (customerID % m)) % m;
     }
+
+    public int getAccountNumber() {
+        return this.accountNumber;
+    }
+
+    public String getCustomerName() {
+        return this.customerName;
+    }
 }
