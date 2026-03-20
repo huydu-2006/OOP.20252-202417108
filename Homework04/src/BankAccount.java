@@ -28,11 +28,33 @@ public class BankAccount {
         System.out.println("Done!");
     }
     public boolean deposite(double amount, long customerID, String customerName) {
-        return true; // prototype
+        if (!isOwner(customerID, customerName)) {
+            return false;
+        }
+        else if (amount <= 0) {
+            System.out.println("Invalid amount");
+            return false;
+        }
+        
+        this.balance += amount;
+        return true;
     }
 
     public boolean withdraw(double amount, long customerID, String customerName) {
-        return true; // prototype
+        if (!isOwner(customerID, customerName)) {
+            return false;
+        }
+        else if (amount <= 0) {
+            System.out.println("Invalid amount");
+            return false;
+        }
+        else if (this.balance - amount < BankAccount.INITIAL_BALANCE) {
+            System.out.println("Insufficient balance");
+            return false;
+        }
+
+        this.balance -= amount;
+        return true;
     }
 
     public boolean transfer(double amount, long receiveAccountNumber, long customerID, String customerName) {
