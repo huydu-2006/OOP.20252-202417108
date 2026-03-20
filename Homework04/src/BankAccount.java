@@ -24,6 +24,7 @@ public class BankAccount {
     public BankAccount(String customerName) {
         this.balance = BankAccount.INITIAL_BALANCE;
         this.accountNumber = BankAccount.numsCustomerCount++;
+        this.customerName = customerName;
         BankAccount.customerIdList.add(getHashCode(this.accountNumber, this.customerName));
         System.out.println("Done!");
     }
@@ -136,6 +137,6 @@ public class BankAccount {
             p_pow = (p_pow * p) % m;
         }
 
-        return ((hashValue % m) * p * (customerID % m)) % m;
+        return (((hashValue % m) * p) % m * (customerID % m)) % m;
     }
 }
