@@ -1,43 +1,54 @@
 import java.util.Scanner;
-import java.util.List;
-import java.util.ArrayList;
-import java.lang.Math;
+import java.util.Map;
+import java.util.HashMap;
+
 public class BankAccount {
-    private int accountNumber;
+    private String accountNumber;
     private String customerName;
     private double balance;
+    private final int secretKey;
     private static final double INITIAL_BALANCE = 50_000;
-    private static int numsCustomerCount = 0;
     private static final double TRANSFER_FEE = 0.02;
-    private static final List<Integer> customerIdList = new ArrayList<>();
+    private static final Map<String, Boolean> accountNumberList = new HashMap<>();
 
     public BankAccount() {
         this.balance = BankAccount.INITIAL_BALANCE;
         Scanner sc = new Scanner(System.in);
-        System.out.print("Enter your full name : ");
-        this.customerName = sc.nextLine();
-        this.accountNumber = BankAccount.numsCustomerCount++;
-        BankAccount.customerIdList.add(getHashCode(this.accountNumber, this.customerName));
+        int count = 0;
+        do {
+            if (count != 0) System.out.println("Not a valid name");
+            System.out.print("Enter your full name : ");
+            this.customerName = sc.nextLine();
+            count++;
+        } while(this.customerName.trim().isEmpty());
+        count = 0;
+        do {
+            if (count != 0) System.out.println("Not a valid account number");
+            System.out.print("Enter your account number (String of 8 numbers) : ");
+            this.accountNumber = sc.nextLine();
+            count++;
+        } while (accountNumberList.containsKey(this.accountNumber) || this.accountNumber.trim().isEmpty() || !this.accountNumber.matches("\\d{8}") );
+        count = 0;
+        accountNumberList.put(accountNumber, true);
+        do {
+            if (count != 0) System.out.println("Not a valid balance");
+            System.out.print("Enter your balance : ");
+            this.balance = sc.nextDouble();
+            count++;
+        }  while (this.balance < BankAccount.INITIAL_BALANCE);
+        this.secretKey = getHashCode(this.accountNumber, this.customerName);
         System.out.println("Done!");
     }
 
-    public BankAccount(String customerName) {
-        this.balance = BankAccount.INITIAL_BALANCE;
-        this.accountNumber = BankAccount.numsCustomerCount++;
-        this.customerName = customerName;
-        BankAccount.customerIdList.add(getHashCode(this.accountNumber, this.customerName));
-        System.out.println("Done!");
-    }
-
-    public boolean deposite(double amount, int customerID, String customerName) {
-        if (!isOwner(customerID, customerName)) {
+    public boolean deposite(double amount, String customerID, String customerName) {
+        if (!isOwner(customerID, customerName, this.secretKey)) {
             return false;
         }
         else if (amount <= 0) {
             System.out.println("Invalid amount");
             return false;
         }
-        else if (!this.customerName.equals(customerName) || this.accountNumber != customerID) {
+        else if (!this.customerName.equals(customerName) || !this.accountNumber.equals(customerID)) {
             System.out.println("Invalid user");
             return false;
         }
@@ -46,8 +57,8 @@ public class BankAccount {
         return true;
     }
 
-    public boolean withdraw(double amount, int customerID, String customerName) {
-        if (!isOwner(customerID, customerName)) {
+    public boolean withdraw(double amount, String customerID, String customerName) {
+        if (!isOwner(customerID, customerName, this.secretKey)) {
             return false;
         }
         else if (amount <= 0) {
@@ -58,7 +69,7 @@ public class BankAccount {
             System.out.println("Insufficient balance");
             return false;
         }
-        else if (!this.customerName.equals(customerName) || this.accountNumber != customerID) {
+        else if (!this.customerName.equals(customerName) || !this.accountNumber.equals(customerID)) {
             System.out.println("Invalid user");
             return false;
         }
@@ -68,15 +79,15 @@ public class BankAccount {
         return true;
     }
 
-    public boolean transfer(double amount, BankAccount receiveAccount, int customerID, String customerName) {
-        if (!isOwner(customerID, customerName)) {
+    public boolean transfer(double amount, BankAccount receiveAccount, String customerID, String customerName) {
+        if (!isOwner(customerID, customerName, this.secretKey)) {
             return false;
         }
         else if (amount <= 0) {
             System.out.println("Invalid amount");
             return false;
         }
-        else if (!isOwner(receiveAccount.accountNumber, receiveAccount.customerName)) {
+        else if (!isOwner(receiveAccount.accountNumber, receiveAccount.customerName, receiveAccount.secretKey)) {
             System.out.println("Invalid receiver");
             return false;
         }
@@ -91,7 +102,7 @@ public class BankAccount {
         return true;
     }
 
-    public boolean payBill(double amount, String billName, int customerID, String customerName) {
+    public boolean payBill(double amount, String billName, String customerID, String customerName) {
         if (billName == null) {
             System.out.println("Invalid bill");
             return false;
@@ -100,7 +111,7 @@ public class BankAccount {
             System.out.println("Invalid amount");
             return false;
         }
-        else if (!isOwner(customerID, customerName)) {
+        else if (!isOwner(customerID, customerName, this.secretKey)) {
             return false;
         }
         else if (this.balance - amount < BankAccount.INITIAL_BALANCE) {
@@ -113,39 +124,35 @@ public class BankAccount {
         return true;
     }
 
-    public double checkBalance(int customerID, String customerName) {
-        if (!isOwner(customerID, customerName)) {
+    public double checkBalance(String customerID, String customerName) {
+        if (!isOwner(customerID, customerName, this.secretKey)) {
             return -1D;
         }
-
         return this.balance;
     }
 
-    public static boolean isOwner(int customerID, String customerName) {
-        if (customerID >= BankAccount.numsCustomerCount) {
-            System.out.println("Invalid user");
-            return false;
-        }
-        else if (BankAccount.customerIdList.get(customerID) != getHashCode(customerID, customerName)) {
+    public static boolean isOwner(String customerID, String customerName, int customerSecretKey) {
+        if (customerSecretKey != BankAccount.getHashCode(customerID, customerName)) {
             System.out.println("Invalid user");
             return false;
         }
         return true;
     }
 
-    public static int getHashCode(int customerID, String customerName) {
+    public static int getHashCode(String customerID, String customerName) {
         final int p = 53, m = 1103;
         int hashValue = 0, p_pow = 1;
+        int customerIDInt = Integer.parseInt(customerID) % m;
 
         for (char c : customerName.toCharArray()) {
             hashValue = (hashValue + (c * (p_pow) % m) % m) % m;
             p_pow = (p_pow * p) % m;
         }
 
-        return (((hashValue % m) * p) % m * ((customerID + 1) % m)) % m;
+        return (((hashValue % m) * p) % m * ((customerIDInt + 1) % m)) % m;
     }
 
-    public int getAccountNumber() {
+    public String getAccountNumber() {
         return this.accountNumber;
     }
 

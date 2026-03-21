@@ -1,10 +1,10 @@
 public class Main {
     public static void main(String[] args) {
         BankAccount user1 = new BankAccount();
-        BankAccount user2 = new BankAccount("usr2");
+        BankAccount user2 = new BankAccount();
 
-        int user1ID = user1.getAccountNumber();
-        int user2ID = user2.getAccountNumber();
+        String user1ID = user1.getAccountNumber();
+        String user2ID = user2.getAccountNumber();
         String user1CustomerName = user1.getCustomerName();
         String user2CustomerName = user2.getCustomerName();
 
