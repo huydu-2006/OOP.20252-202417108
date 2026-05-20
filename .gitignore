@@ -1,0 +1,15 @@
+# IntelliJ
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Build
+out/
+target/
+bin/
+
+*.asta.lock
+*.md
+!README.md
