@@ -70,12 +70,14 @@ public class DateView extends JFrame {
         // Input row
         g.gridy = 2;
         g.gridwidth = 1;
+        g.weightx = 0;
         JLabel inputLabel = new JLabel("Enter x:");
         inputLabel.setFont(new Font("SansSerif", Font.BOLD, 13));
         p.add(inputLabel, g);
 
         g.gridx = 1;
         g.gridwidth = 3;
+        g.weightx = 1.0;
         inputField = new JTextField();
         inputField.setFont(new Font("SansSerif", Font.PLAIN, 14));
         inputField.setHorizontalAlignment(JTextField.CENTER);
