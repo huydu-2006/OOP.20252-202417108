@@ -34,7 +34,7 @@ public class DateController {
 
     public void refreshDisplay() {
         LocalDate d = model.getDate();
-        view.setDateDisplay(String.format("Day %02d month %02d year %04d",
+        view.setDateDisplay(String.format("Ngày %02d tháng %02d năm %04d",
                 d.getDayOfMonth(), d.getMonthValue(), d.getYear()));
     }
 
