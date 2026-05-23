@@ -34,7 +34,6 @@ public class ButtonListener implements ActionListener {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     calculator.updateDisplayOutput("Error");
-                    calculator.clearInput();
                 }
             }
             default -> calculator.appendToInput(command);

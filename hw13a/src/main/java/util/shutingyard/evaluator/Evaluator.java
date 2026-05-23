@@ -12,9 +12,6 @@ public class Evaluator {
     public BigDecimal eval(List<Token> tokens) {
         Deque<Token> stNumber = new ArrayDeque<>();
         for (Token token : tokens) {
-            System.out.println(token.toString());
-        }
-        for (Token token : tokens) {
             if (token.getType() == TokenType.NUMBER) {
                 stNumber.addLast(token);
             } else {

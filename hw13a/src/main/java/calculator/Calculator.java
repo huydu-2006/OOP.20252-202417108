@@ -7,8 +7,8 @@ public class Calculator extends JFrame {
     private JPanel header;
     private String[] mode = { "Standard", "Scientific" };
     private JComboBox<String> modeComboBox;
-    private String[] simpleMode = { "Simple", "Programmer" };
-    private JComboBox<String> simpleModeComboBox;
+    private String[] userMode = { "Simple", "Programmer" };
+    private JComboBox<String> userModeComboBox;
 
     private JPanel screen;
     private JTextField displayInput;
@@ -28,8 +28,8 @@ public class Calculator extends JFrame {
                 15));
         modeComboBox = new JComboBox<>(mode);
         header.add(modeComboBox);
-        simpleModeComboBox = new JComboBox<>(simpleMode);
-        header.add(simpleModeComboBox);
+        userModeComboBox = new JComboBox<>(userMode);
+        header.add(userModeComboBox);
         this.add(header);
 
         // screen
