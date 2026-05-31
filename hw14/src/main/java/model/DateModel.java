@@ -2,67 +2,47 @@ package main.java.model;
 
 import java.time.LocalDate;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-import main.java.controller.DateController;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class DateModel {
-    private LocalDate date;
-    private StringProperty dateStringProperty = new SimpleStringProperty();
+    private final ObjectProperty<LocalDate> selectedDate =
+            new SimpleObjectProperty<>(LocalDate.now());
 
-    public DateModel() {
-        this.date = LocalDate.now();
-        dateStringProperty.setValue(date.toString());
-    }
+    private final ObjectProperty<LocalDate> resultDate =
+            new SimpleObjectProperty<>(null);
 
-    public LocalDate getDate() {
-        return date;
-    }
+    private final ObjectProperty<DateFormat> dateFormat =
+            new SimpleObjectProperty<>(DateFormat.VIETNAM);
 
-    public void addDays(int days) {
-        this.date = this.date.plusDays(days);
-        refreshDateStringProperty();
-    }
+    private final StringBinding selectedDateText = Bindings.createStringBinding(
+            () -> dateFormat.get().format(selectedDate.get()),
+            selectedDate, dateFormat);
 
-    public void subtractDays(int days) {
-        this.date = this.date.minusDays(days);
-        refreshDateStringProperty();
-    }
+    private final StringBinding resultDateText = Bindings.createStringBinding(
+            () -> resultDate.get() == null ? "—" : dateFormat.get().format(resultDate.get()),
+            resultDate, dateFormat);
 
-    public void addMonths(int months) {
-        this.date = this.date.plusMonths(months);
-        refreshDateStringProperty();
-    }
+    public ObjectProperty<LocalDate> selectedDateProperty() { return selectedDate; }
+    public ObjectProperty<LocalDate> resultDateProperty()   { return resultDate; }
+    public ObjectProperty<DateFormat> dateFormatProperty()  { return dateFormat; }
 
-    public void subtractMonths(int months) {
-        this.date = this.date.minusMonths(months);
-        refreshDateStringProperty();
-    }
+    public StringBinding selectedDateTextBinding() { return selectedDateText; }
+    public StringBinding resultDateTextBinding()   { return resultDateText; }
 
-    public void addYears(int years) {
-        this.date = this.date.plusYears(years);
-        refreshDateStringProperty();
-    }
-
-    public void subtractYears(int years) {
-        this.date = this.date.minusYears(years);
-        refreshDateStringProperty();
-    }
-
-    private void refreshDateStringProperty() {
-        dateStringProperty.setValue(date.toString());
-    }
-
-    public StringProperty getDateStringProperty() {
-        return dateStringProperty;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-        refreshDateStringProperty();
-    }
-    public static void main(String[] args) {
-        LocalDate date = LocalDate.now();
-        System.out.println(date.toString());
+    public void applyOperation(int amount, Direction direction, TimeUnit unit) {
+        LocalDate base = selectedDate.get();
+        if (base == null) {
+            return;
+        }
+        int signed = direction == Direction.BEFORE ? -amount : amount;
+        LocalDate next = switch (unit) {
+            case DAYS   -> base.plusDays(signed);
+            case MONTHS -> base.plusMonths(signed);
+            case YEARS  -> base.plusYears(signed);
+        };
+        resultDate.set(next);
     }
 }

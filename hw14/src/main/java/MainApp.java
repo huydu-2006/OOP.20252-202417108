@@ -1,4 +1,4 @@
-package test.main.java.view;
+package main.java;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -6,7 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class TestView extends Application {
+public class MainApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
@@ -17,6 +17,7 @@ public class TestView extends Application {
         Scene scene = new Scene(root);
         stage.setTitle("DateView");
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 }
